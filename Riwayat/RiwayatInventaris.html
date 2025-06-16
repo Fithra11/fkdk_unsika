@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 280px;
+            height: 100vh;
+            background: maroon;
+            color: white;
+            position: fixed;
+            padding: 20px;
+            transition: 0.3s;
+            text-align: left;
+        }
+
+        .sidebar .logo {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .sidebar .logo img {
+            max-width: 100px;
+            height: auto;
+        }
+
+        .sidebar ul {
+            padding: 0;
+            margin-top: 0;
+        }
+
+        .sidebar ul li {
+            list-style: none;
+            padding: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+        }
+
+        .sidebar ul li i {
+            width: 35px;
+            font-size: 22px;
+            text-align: center;
+        }
+
+        .sidebar ul li:hover {
+            background: #a93226;
+        }
+
+        .sidebar .submenu {
+            display: none;
+            padding-left: 50px;
+        }
+
+        .sidebar .submenu li {
+            font-size: 16px;
+            padding: 5px 0;
+        }
+
+        .sidebar .has-submenu {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sidebar .has-submenu i.arrow {
+            transition: transform 0.3s;
+        }
+
+        .sidebar .has-submenu.open i.arrow {
+            transform: rotate(90deg);
+        }
+
+        .main-content {
+            flex-grow: 1;
+            margin-left: 280px;
+            padding-top: 80px;
+            /* Tambahkan ini */
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 280px;
+            /* sesuai lebar sidebar */
+            right: 0;
+            height: 70px;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0077b6;
+            padding: 15px;
+            border-bottom: 2px solid #ddd;
+            color: white;
+        }
+
+        .title {
+            font-size: 14px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .subtitle {
+            font-size: 12px;
+            font-weight: normal;
+            margin: 0;
+        }
+
+        .logout {
+            cursor: pointer;
+            font-size: 24px;
+            color: #ffffff;
+        }
+
+        .logout:hover {
+            color: #000000;
+        }
+
+        .table-container {
+            margin-top: 20px;
+        }
+
+        .img-thumbnail {
+            max-width: 100px;
+            max-height: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <img src="../Static/FKDK.png" alt="Logo" />
+        </div>
+        <ul>
+            <li class="navigate" data-url="../Dashboard/Dashboard.html"><i class="fas fa-home"></i> Dashboard</li>
+            <li class="has-submenu"><span><i class="fas fa-book"></i> Kesekretariatan</span> <i
+                    class="fas fa-chevron-right arrow"></i></li>
+            <ul class="submenu">
+                <li class="navigate" data-url="../User/ProposalUser.html">proposal</li>
+                <li class="navigate" data-url="../User/LPJUser.html">LPJ</li>
+                <li class="navigate" data-url="../User/PersuratanUser.html">persuratan</li>
+                <li class="navigate" data-url="../User/InventarisUser.html">inventaris</li>
+            </ul>
+            <li class="has-submenu"><span><i class="fas fa-coins"></i> Kebendaharaan</span> <i
+                    class="fas fa-chevron-right arrow"></i></li>
+            <ul class="submenu">
+                <li class="navigate" data-url="../User/PemasukanUser.html">pemasukan</li>
+                <li class="navigate" data-url="../User/PengeluaranUser.html">pengeluaran</li>
+            </ul>
+            <li class="has-submenu"><span><i class="fas fa-clock-rotate-left"></i> Riwayat</span> <i
+                    class="fas fa-chevron-right arrow"></i></li>
+            <ul class="submenu">
+                <li class="has-submenu"><span>KESEKRETARIATAN</span> <i class="fas fa-chevron-right arrow"></i></li>
+                <ul class="submenu">
+                    <li class="navigate" data-url="../Riwayat/RiwayatProposal.html">proposal</li>
+                    <li class="navigate" data-url="../Riwayat/RiwayatLPJ.html">LPJ</li>
+                    <li class="navigate" data-url="../Riwayat/RiwayatPersuratan.html">persuratan</li>
+                    <li class="navigate" data-url="../Riwayat/RiwayatInventaris.html">inventaris</li>
+                </ul>
+                <li class="has-submenu"><span>KEBENDAHARAAN</span> <i class="fas fa-chevron-right arrow"></i></li>
+                <ul class="submenu">
+                    <li class="navigate" data-url="../Riwayat/RiwayatPemasukan.html">pemasukan</li>
+                    <li class="navigate" data-url="../Riwayat/RiwayatPengeluaran.html">pengeluaran</li>
+                </ul>
+            </ul>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <div>
+                <p class="title">FORUM KOMUNIKASI DAKWAH KAMPUS</p>
+                <p class="subtitle">Universitas Singaperbangsa Karawang</p>
+            </div>
+            <div>
+                <span id="username">Halo, User</span>
+                <i class="fas fa-user-circle logout" id="logout"></i>
+            </div>
+        </div>
+
+        <div class="container mt-4 table-container">
+            <h3><i class="fas fa-book"></i> Data Inventaris</h3>
+            <table class="table table-bordered table-striped" id="inventarisTable">
+                <thead class="table-dark">
+                    <tr id="tableHeader">
+                        <th>No</th>
+                        <th>Nama</th>
+                        <th>Instansi</th>
+                        <th>Tanggal Surat Masuk</th>
+                        <th>Tanggal Pengambilan</th>
+                        <th>Tanggal Pengembalian</th>
+                        <th>Masa Sewa</th>
+                        <th>Keterangan DP/Lunas</th>
+                        <th>Bukti Pembayaran</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            const role = sessionStorage.getItem("role") || "admin";
+            const username = sessionStorage.getItem("username") || "User";
+
+            if (role === "admin") {
+                $("#username").text("Halo, Admin FKDK");
+                $("#tableHeader").append("<th>Action</th>");
+            } else {
+                $("#username").text("Halo, " + username);
+            }
+
+            $(".has-submenu").click(function () {
+                $(this).next(".submenu").slideToggle();
+                $(this).toggleClass("open");
+            });
+
+            $(".navigate").click(function () {
+                const url = $(this).data("url");
+                window.location.href = url;
+            });
+
+            $("#logout").click(function () {
+                alert("Anda telah logout!");
+                sessionStorage.clear();
+                window.location.href = "../Login/Login.html";
+            });
+
+            // Fungsi untuk menampilkan data inventaris dari API
+            function loadInventarisData() {
+                $.ajax({
+                    url: 'http://localhost:5000/inventaris', // Pastikan ini URL API Anda
+                    type: 'GET',
+                    success: function (data) {
+                        const tableBody = $("#tableBody");
+                        tableBody.empty(); // Kosongkan tabel sebelum menambahkan data
+
+                        data.forEach((item, index) => {
+                            let row = `
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td>${item.nama}</td>
+                                <td>${item.instansi}</td>
+                                <td>${item.tanggal_surat_masuk || ''}</td>
+                                <td>${item.tanggal_pengambilan || ''}</td>
+                                <td>${item.tanggal_pengembalian || ''}</td>
+                                <td>${item.masa || ''}</td> <td>${item.status || ''}</td> <td>`;
+                            if (item.bukti && item.bukti.base64) {
+                                row += `<a href="${item.bukti.base64}" download="${item.bukti.name || 'bukti'}">
+                                        <img src="${item.bukti.base64}" class="img-thumbnail" alt="Bukti Pembayaran">
+                                    </a>`;
+                            } else {
+                                row += `Tidak ada bukti`;
+                            }
+                            row += `</td>`;
+
+                            if (role === "admin") {
+                                row += `<td>
+                                <button class="btn btn-warning btn-sm edit-btn" data-id="${item.id}" data-index="${index}"><i class="fas fa-edit"></i> Edit</button>
+                                <button class="btn btn-danger btn-sm delete-btn" data-id="${item.id}"><i class="fas fa-trash"></i> Hapus</button>
+                            </td>`;
+                            }
+                            row += `</tr>`;
+                            tableBody.append(row);
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        alert("Gagal memuat data inventaris: " + xhr.responseText);
+                    }
+                });
+            }
+
+            // Panggil fungsi untuk memuat data saat halaman riwayat dibuka
+            loadInventarisData();
+
+            // Tombol Edit
+            $("#tableBody").on("click", ".edit-btn", function () {
+                const inventarisId = $(this).data("id");
+                const row = $(this).closest("tr");
+                const cols = row.children("td");
+
+                if ($(this).html().includes("Edit")) {
+                    const currentNama = $(cols[1]).text();
+                    const currentInstansi = $(cols[2]).text();
+                    const currentTanggalMasuk = $(cols[3]).text();
+                    const currentTanggalAmbil = $(cols[4]).text();
+                    const currentTanggalKembali = $(cols[5]).text();
+                    const currentMasaSewa = $(cols[6]).text(); // Ambil nilai masa sewa
+                    const currentKeterangan = $(cols[7]).text(); // Ambil nilai keterangan DP/Lunas
+                    const currentBuktiSrc = $(cols[8]).find('img').attr('src');
+                    const currentBuktiName = $(cols[8]).find('a').attr('download');
+
+                    $(cols[1]).html(`<input type="text" class="form-control form-control-sm" value="${currentNama}">`);
+                    $(cols[2]).html(`<input type="text" class="form-control form-control-sm" value="${currentInstansi}">`);
+                    $(cols[3]).html(`<input type="date" class="form-control form-control-sm" value="${currentTanggalMasuk}">`);
+                    $(cols[4]).html(`<input type="date" class="form-control form-control-sm" value="${currentTanggalAmbil}">`);
+                    $(cols[5]).html(`<input type="date" class="form-control form-control-sm" value="${currentTanggalKembali}">`);
+                    $(cols[6]).html(`<input type="text" class="form-control form-control-sm" value="${currentMasaSewa}">`); // Input untuk masa sewa
+                    $(cols[7]).html(`<select class="form-control form-control-sm">
+                                    <option value="">-- Pilih --</option>
+                                    <option value="DP" ${currentKeterangan === 'DP' ? 'selected' : ''}>DP</option>
+                                    <option value="Lunas" ${currentKeterangan === 'Lunas' ? 'selected' : ''}>Lunas</option>
+                                </select>`); // Select untuk keterangan DP/Lunas
+                    $(cols[8]).html(`<input type="file" accept="image/*" class="form-control form-control-sm bukti-file">
+                                    ${currentBuktiSrc ? `<img src="${currentBuktiSrc}" class="img-thumbnail mt-2" alt="Preview">` : ''}`);
+                    $(this).html(`<i class="fas fa-save"></i> Save`).removeClass("btn-warning").addClass("btn-warning");
+                } else {
+                    const nama = $(cols[1]).find("input").val();
+                    const instansi = $(cols[2]).find("input").val();
+                    const suratMasuk = $(cols[3]).find("input").val();
+                    const pengambilan = $(cols[4]).find("input").val();
+                    const pengembalian = $(cols[5]).find("input").val();
+                    const masa = $(cols[6]).find("input").val(); // Ambil nilai masa sewa dari input
+                    const status = $(cols[7]).find("select").val(); // Ambil nilai keterangan DP/Lunas dari select
+                    const buktiFile = $(cols[8]).find(".bukti-file")[0].files[0];
+                    const existingBuktiSrc = $(cols[8]).find('img').attr('src');
+                    const existingBuktiName = $(cols[8]).find('a').attr('download');
+
+                    let updatedBuktiData = null;
+                    if (buktiFile) {
+                        const reader = new FileReader();
+                        reader.onloadend = function () {
+                            updatedBuktiData = { base64: reader.result, name: buktiFile.name };
+                            sendUpdateInventarisData(inventarisId, nama, instansi, suratMasuk, pengambilan, pengembalian, masa, status, updatedBuktiData);
+                        };
+                        reader.readAsDataURL(buktiFile);
+                    } else {
+                        if (existingBuktiSrc) {
+                            updatedBuktiData = { base64: existingBuktiSrc, name: existingBuktiName || 'bukti_lama' };
+                        }
+                        sendUpdateInventarisData(inventarisId, nama, instansi, suratMasuk, pengambilan, pengembalian, masa, status, updatedBuktiData);
+                    }
+
+                    $(this).html(`<i class="fas fa-edit"></i> Edit`).removeClass("btn-warning").addClass("btn-warning"); // Change back to Edit button
+                }
+            });
+
+            // Fungsi untuk mengirim update data ke API Flask
+            function sendUpdateInventarisData(id, nama, instansi, tanggalMasuk, tanggalAmbil, tanggalKembali, masaSewa, keterangan, buktiData) {
+                const dataToSend = {
+                    nama: nama,
+                    instansi: instansi,
+                    suratMasuk: tanggalMasuk,
+                    pengambilan: tanggalAmbil,
+                    pengembalian: tanggalKembali,
+                    masa: masaSewa, // Mengirim masa sewa yang diperbarui
+                    status: keterangan, // Mengirim keterangan DP/Lunas yang diperbarui
+                    bukti: buktiData
+                };
+
+                $.ajax({
+                    url: `http://localhost:5000/inventaris/${id}`, // Pastikan ini URL API Anda
+                    type: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify(dataToSend),
+                    success: function (response) {
+                        alert(response.message);
+                        loadInventarisData(); // Muat ulang data setelah berhasil update
+                    },
+                    error: function (xhr, status, error) {
+                        alert("Gagal memperbarui data inventaris: " + xhr.responseText);
+                    }
+                });
+            }
+
+            // Tombol Hapus
+            $("#tableBody").on("click", ".delete-btn", function () {
+                const inventarisId = $(this).data("id");
+                const confirmDelete = confirm("Yakin ingin menghapus data ini?");
+                if (confirmDelete) {
+                    $.ajax({
+                        url: `http://localhost:5000/inventaris/${inventarisId}`, // Pastikan ini URL API Anda
+                        type: 'DELETE',
+                        success: function (response) {
+                            alert(response.message);
+                            loadInventarisData(); // Muat ulang data setelah berhasil delete
+                        },
+                        error: function (xhr, status, error) {
+                            alert("Gagal menghapus data inventaris: " + xhr.responseText);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riwayat Persuratan</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 280px;
+            height: 100vh;
+            background: maroon;
+            color: white;
+            position: fixed;
+            padding: 20px;
+            transition: 0.3s;
+            text-align: left;
+        }
+
+        .sidebar .logo {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .sidebar .logo img {
+            max-width: 100px;
+            height: auto;
+        }
+
+        .sidebar ul {
+            padding: 0;
+            margin-top: 0;
+        }
+
+        .sidebar ul li {
+            list-style: none;
+            padding: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+        }
+
+        .sidebar ul li i {
+            width: 35px;
+            font-size: 22px;
+            text-align: center;
+        }
+
+        .sidebar ul li:hover {
+            background: #a93226;
+        }
+
+        .sidebar .submenu {
+            display: none;
+            padding-left: 50px;
+        }
+
+        .sidebar .submenu li {
+            font-size: 16px;
+            padding: 5px 0;
+        }
+
+        .sidebar .has-submenu {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sidebar .has-submenu i.arrow {
+            transition: transform 0.3s;
+        }
+
+        .sidebar .has-submenu.open i.arrow {
+            transform: rotate(90deg);
+        }
+
+        .main-content {
+            flex-grow: 1;
+            margin-left: 280px;
+            padding-top: 80px;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 280px;
+            right: 0;
+            height: 70px;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0077b6;
+            padding: 15px;
+            border-bottom: 2px solid #ddd;
+            color: white;
+        }
+
+        .title {
+            font-size: 14px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .subtitle {
+            font-size: 12px;
+            font-weight: normal;
+            margin: 0;
+        }
+
+        .logout {
+            cursor: pointer;
+            font-size: 24px;
+            color: #ffffff;
+        }
+
+        .logout:hover {
+            color: #000000;
+        }
+
+        .table-container {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <img src="../Static/FKDK.png" alt="Logo">
+        </div>
+        <ul>
+            <li class="navigate" data-url="../Dashboard/Dashboard.html"><i class="fas fa-home"></i> Dashboard</li>
+            <li class="has-submenu"><span><i class="fas fa-book"></i> Kesekretariatan</span> <i
+                    class="fas fa-chevron-right arrow"></i></li>
+            <ul class="submenu">
+                <li class="navigate" data-url="../User/ProposalUser.html">proposal</li>
+                <li class="navigate" data-url="../User/LPJUser.html">LPJ</li>
+                <li class="navigate" data-url="../User/PersuratanUser.html">persuratan</li>
+                <li class="navigate" data-url="../User/InventarisUser.html">inventaris</li>
+            </ul>
+            <li class="has-submenu"><span><i class="fas fa-coins"></i> Kebendaharaan</span> <i
+                    class="fas fa-chevron-right arrow"></i></li>
+            <ul class="submenu">
+                <li class="navigate" data-url="../User/PemasukanUser.html">pemasukan</li>
+                <li class="navigate" data-url="../User/PengeluaranUser.html">pengeluaran</li>
+            </ul>
+            <li class="has-submenu"><span><i class="fas fa-clock-rotate-left"></i> Riwayat</span> <i
+                    class="fas fa-chevron-right arrow"></i></li>
+            <ul class="submenu">
+                <li class="has-submenu"><span>KESEKRETARIATAN</span> <i class="fas fa-chevron-right arrow"></i></li>
+                <ul class="submenu">
+                    <li class="navigate" data-url="../Riwayat/RiwayatProposal.html">proposal</li>
+                    <li class="navigate" data-url="../Riwayat/RiwayatLPJ.html">LPJ</li>
+                    <li class="navigate" data-url="../Riwayat/RiwayatPersuratan.html">persuratan</li>
+                    <li class="navigate" data-url="../Riwayat/RiwayatInventaris.html">inventaris</li>
+                </ul>
+                <li class="has-submenu"><span>KEBENDAHARAAN</span> <i class="fas fa-chevron-right arrow"></i></li>
+                <ul class="submenu">
+                    <li class="navigate" data-url="../Riwayat/RiwayatPemasukan.html">pemasukan</li>
+                    <li class="navigate" data-url="../Riwayat/RiwayatPengeluaran.html">pengeluaran</li>
+                </ul>
+            </ul>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <div>
+                <p class="title">FORUM KOMUNIKASI DAKWAH KAMPUS</p>
+                <p class="subtitle">Universitas Singaperbangsa Karawang</p>
+            </div>
+            <div>
+                <span id="username">Halo, User</span>
+                <i class="fas fa-user-circle logout" id="logout"></i>
+            </div>
+        </div>
+
+        <div class="container mt-4 table-container">
+            <h3><i class="fas fa-book"></i> Data Persuratan</h3>
+            <table class="table table-bordered table-striped" id="persuratanTable">
+                <thead class="table-dark">
+                    <tr id="tableHeader">
+                        <th>No</th>
+                        <th>Tanggal Masuk</th>
+                        <th>Jenis Surat</th>
+                        <th>Nama</th>
+                        <th>Instansi</th>
+                        <th>Tanggal Approve</th>
+                        <th>Aktivitas</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            const role = sessionStorage.getItem("role");
+            const username = sessionStorage.getItem("username");
+
+            if (role === "admin") {
+                $("#username").text("Halo, Admin FKDK");
+                $("#tableHeader").append("<th>Action</th>");
+            } else if (role === "user" && username) {
+                $("#username").text("Halo, " + username);
+            }
+
+            $(".has-submenu").click(function () {
+                $(this).next(".submenu").slideToggle();
+                $(this).toggleClass("open");
+            });
+
+            $(".navigate").click(function () {
+                const url = $(this).data("url");
+                window.location.href = url;
+            });
+
+            $("#logout").click(function () {
+                alert("Anda telah logout!");
+                sessionStorage.clear();
+                window.location.href = "../Login/Login.html";
+            });
+
+            // Function untuk mengambil dan merender data dari Flask
+            function renderTable() {
+                $("#tableBody").empty();
+                $.ajax({
+                    url: "http://127.0.0.1:5000/persuratan", // Endpoint untuk mendapatkan semua data
+                    type: "GET",
+                    success: function (data) {
+                        data.forEach((item, index) => {
+                            let row = `<tr>
+                                    <td>${index + 1}</td>
+                                    <td>${item.tanggal_masuk || ''}</td>
+                                    <td>${item.jenis_surat || ''}</td>
+                                    <td>${item.nama || ''}</td>
+                                    <td>${item.instansi || ''}</td>
+                                    <td>${item.tanggal_approve || '-'}</td>
+                                    <td>`;
+
+                            if (item.aktivitas && item.aktivitas !== "-") {
+                                // Data-id di sini adalah ID dari database, bukan indeks LocalStorage
+                                row += `<a href="#" class="btn btn-primary btn-sm downloadBtn text-white" data-id="${item.id}" data-filename="${item.aktivitas}"><i class="fas fa-download text-white"></i> Download File</a>`;
+                            } else {
+                                row += `-`;
+                            }
+
+                            row += `</td>`;
+
+                            if (role === "admin") {
+                                row += `<td>
+                                    <button class="btn btn-warning btn-sm editBtn" data-id="${item.id}"><i class="fas fa-edit"></i> Edit</button>
+                                    <button class="btn btn-danger btn-sm deleteBtn" data-id="${item.id}"><i class="fas fa-trash"></i> Delete</button>
+                                </td>`;
+                            }
+
+                            row += "</tr>";
+                            $("#tableBody").append(row);
+                        });
+                        attachEditDeleteListeners();
+                        attachDownloadListeners();
+                    },
+                    error: function (xhr, status, error) {
+                        alert("Error fetching data: " + xhr.responseJSON.message);
+                        console.error("Error fetching data:", error);
+                    }
+                });
+            }
+
+            function attachDownloadListeners() {
+                $("#persuratanTable").off('click', '.downloadBtn').on("click", ".downloadBtn", function (event) {
+                    event.preventDefault();
+                    const persuratanId = $(this).data("id");
+                    const filename = $(this).data("filename"); // Ambil nama file dari data-filename
+
+                    if (!filename || filename === "-") {
+                        alert("Tidak ada file untuk diunduh.");
+                        return;
+                    }
+
+                    // Mengirim permintaan download ke Flask
+                    window.location.href = `http://127.0.0.1:5000/download_file/${persuratanId}`;
+                });
+            }
+
+            function attachEditDeleteListeners() {
+                $("#persuratanTable").off('click', '.editBtn').on("click", ".editBtn", function () {
+                    const row = $(this).closest("tr");
+                    const cols = row.find("td");
+                    const persuratanId = $(this).data("id"); // Ambil ID dari database
+
+                    const tanggalMasuk = cols.eq(1).text();
+                    const jenisSurat = cols.eq(2).text();
+                    const nama = cols.eq(3).text();
+                    const instansi = cols.eq(4).text();
+                    const tanggalApprove = cols.eq(5).text();
+                    const aktivitasFilename = cols.eq(6).find("a").data("filename") || "-";
+
+                    cols.eq(1).html(`<input type="date" class="form-control form-control-sm" value="${tanggalMasuk}">`);
+                    cols.eq(2).html(`<input type="text" class="form-control form-control-sm" value="${jenisSurat}">`);
+                    cols.eq(3).html(`<input type="text" class="form-control form-control-sm" value="${nama}">`);
+                    cols.eq(4).html(`<input type="text" class="form-control form-control-sm" value="${instansi}">`);
+
+                    // Set up tanggal_approve dropdown and picker
+                    let tanggalApproveHtml = `
+                        <select class="form-select form-select-sm tanggal-status-select">
+                            <option value="-"> - </option>
+                            <option value="tanggal">Pilih Tanggal</option>
+                        </select>
+                        <input type="date" class="form-control form-control-sm mt-1 tanggal-picker" style="display:none;">
+                    `;
+                    cols.eq(5).html(tanggalApproveHtml);
+
+                    const tanggalStatusSelect = cols.eq(5).find('.tanggal-status-select');
+                    const tanggalPickerInput = cols.eq(5).find('.tanggal-picker');
+
+                    if (tanggalApprove && tanggalApprove !== "-") {
+                        tanggalStatusSelect.val("tanggal");
+                        tanggalPickerInput.val(tanggalApprove).show();
+                    }
+
+                    tanggalStatusSelect.on('change', function () {
+                        if ($(this).val() === "tanggal") {
+                            tanggalPickerInput.show();
+                        } else {
+                            tanggalPickerInput.hide().val(''); // Clear value when hidden
+                        }
+                    });
+
+                    // Set up aktivitas dropdown and file input
+                    let aktivitasEditHtml = `
+                        <select class="form-select form-select-sm aktivitas-select">
+                            <option value="-"> - </option>
+                            <option value="upload">Upload File</option>
+                        </select>
+                        <input type="file" accept=".pdf,.docx" class="form-control form-control-sm mt-1 file-upload-input" style="display:none;">
+                    `;
+                    if (aktivitasFilename && aktivitasFilename !== "-") {
+                        aktivitasEditHtml += `<small class="text-muted d-block mt-1 current-file-display">File Saat Ini: ${aktivitasFilename}</small>`;
+                    } else {
+                        aktivitasEditHtml += `<small class="text-muted d-block mt-1 current-file-display" style="display:none;"></small>`;
+                    }
+                    cols.eq(6).html(aktivitasEditHtml);
+
+                    const aktivitasSelect = cols.eq(6).find('.aktivitas-select');
+                    const fileUploadInput = cols.eq(6).find('.file-upload-input');
+                    const currentFileDisplay = cols.eq(6).find('.current-file-display');
+
+                    if (aktivitasFilename && aktivitasFilename !== "-") {
+                        aktivitasSelect.val("upload");
+                        fileUploadInput.show();
+                        currentFileDisplay.show();
+                    } else {
+                        aktivitasSelect.val("-");
+                        fileUploadInput.hide();
+                        currentFileDisplay.hide();
+                    }
+
+                    aktivitasSelect.on('change', function () {
+                        if ($(this).val() === "upload") {
+                            fileUploadInput.show();
+                            currentFileDisplay.hide(); // Hide current file display if new file is uploaded
+                        } else {
+                            fileUploadInput.hide();
+                            currentFileDisplay.hide().text(''); // Clear and hide current file display
+                        }
+                    });
+
+                    $(this).removeClass("editBtn btn-warning").addClass("saveBtn btn-warning").html('<i class="fas fa-save"></i> Simpan');
+                });
+
+                $("#persuratanTable").off('click', '.saveBtn').on("click", ".saveBtn", function () {
+                    const row = $(this).closest("tr");
+                    const cols = row.find("td");
+                    const persuratanId = $(this).data("id"); // Ambil ID dari database
+
+                    const tanggalMasuk = cols.eq(1).find("input").val();
+                    const jenisSurat = cols.eq(2).find("input").val();
+                    const nama = cols.eq(3).find("input").val();
+                    const instansi = cols.eq(4).find("input").val();
+
+                    const tanggalApproveStatus = cols.eq(5).find(".tanggal-status-select").val();
+                    const tanggalApprovePicker = cols.eq(5).find(".tanggal-picker").val();
+                    const tanggalApprove = (tanggalApproveStatus === "tanggal" && tanggalApprovePicker) ? tanggalApprovePicker : null; // Use null for empty date in DB
+
+                    const aktivitasSelect = cols.eq(6).find(".aktivitas-select").val();
+                    const fileInput = cols.eq(6).find(".file-upload-input")[0];
+                    let formData = new FormData();
+
+                    formData.append('tanggalMasuk', tanggalMasuk);
+                    formData.append('jenisSurat', jenisSurat);
+                    formData.append('nama', nama);
+                    formData.append('instansi', instansi);
+                    formData.append('tanggalApprove', tanggalApprove || '-'); // Kirim '-' jika null
+
+                    if (aktivitasSelect === "upload" && fileInput && fileInput.files.length > 0) {
+                        const file = fileInput.files[0];
+                        const allowedExtensions = ['pdf', 'docx'];
+                        const fileExtension = file.name.split('.').pop().toLowerCase();
+                        if (!allowedExtensions.includes(fileExtension)) {
+                            alert("File harus berformat .pdf atau .docx");
+                            return; // Stop execution
+                        }
+                        formData.append('aktivitasFile', file); // Append the actual file
+                        formData.append('aktivitasFilename', file.name); // Send filename as separate field
+                    } else if (aktivitasSelect === "-") {
+                        formData.append('aktivitasFilename', '-'); // Indicate no file
+                        formData.append('removeExistingFile', 'true'); // Flag to remove existing file
+                    } else {
+                        // If no new file is uploaded but it was previously "upload", keep the old filename
+                        const existingFilename = cols.eq(6).find(".current-file-display").text().replace("File Saat Ini: ", "").trim();
+                        if (existingFilename) {
+                            formData.append('aktivitasFilename', existingFilename);
+                        } else {
+                            formData.append('aktivitasFilename', '-');
+                        }
+                    }
+
+                    // Kirim data ke backend Flask
+                    $.ajax({
+                        url: `http://127.0.0.1:5000/persuratan/${persuratanId}`, // Endpoint untuk update
+                        type: "PUT",
+                        data: formData,
+                        processData: false, // Don't process the data
+                        contentType: false, // Don't set content type (FormData does it)
+                        success: function (response) {
+                            alert(response.message);
+                            renderTable(); // Refresh table setelah berhasil update
+                        },
+                        error: function (xhr, status, error) {
+                            alert("Error updating data: " + (xhr.responseJSON ? xhr.responseJSON.message : error));
+                            console.error("Error updating data:", error);
+                        }
+                    });
+                });
+
+                $("#persuratanTable").off('click', '.deleteBtn').on("click", ".deleteBtn", function () {
+                    if (confirm("Yakin ingin menghapus data ini?")) {
+                        const persuratanId = $(this).data("id"); // Ambil ID dari database
+
+                        // Mengirim permintaan delete ke Flask
+                        $.ajax({
+                            url: `http://127.0.0.1:5000/persuratan/${persuratanId}`, // Endpoint untuk delete
+                            type: "DELETE",
+                            success: function (response) {
+                                alert(response.message);
+                                renderTable(); // Refresh table setelah berhasil delete
+                            },
+                            error: function (xhr, status, error) {
+                                alert("Error deleting data: " + xhr.responseJSON.message);
+                                console.error("Error deleting data:", error);
+                            }
+                        });
+                    }
+                });
+            }
+
+            renderTable(); // Panggil fungsi renderTable saat halaman dimuat
+        });
+    </script>
+</body>
+
+</html>
