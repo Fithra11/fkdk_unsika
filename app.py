@@ -14,10 +14,11 @@ CORS(app)
 
 # === KONFIGURASI DATABASE ===
 DB_CONFIG = {
-    'host': 'localhost',
-    'user': 'root',
-    'password': '',
-    'database': 'skripsi'
+    'host': os.getenv('DB_HOST', 'yamabiko.proxy.rlwy.net'), # Default jika variabel lingkungan tidak ditemukan (opsional)
+    'user': os.getenv('DB_USER', 'root'),
+    'password': os.getenv('DB_PASSWORD', 'LfbIfgJacUolfgMEkxbVDhaExXoxxPhZ'),
+    'database': os.getenv('DB_DATABASE', 'railway'),
+    'port': int(os.getenv('DB_PORT', 35739)) # Pastikan dikonversi ke integer
 }
 
 # === FOLDER UPLOAD ===
@@ -81,7 +82,7 @@ def login():
     user = cursor.fetchone()
     cursor.close(); conn.close()
     if user and bcrypt.checkpw(password.encode(), user['password_hash'].encode()):
-        return jsonify({"message": "Login berhasil", "role": "user"}), 200
+        return jsonify({"message": "Login berhasil", "role": "user", "username": user['username']}), 200
     return jsonify({"error": "Login gagal"}), 401
     
 @app.route('/submit_proposal', methods=['POST'])
