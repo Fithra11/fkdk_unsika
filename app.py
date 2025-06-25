@@ -1,5 +1,5 @@
 # app.py
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify, send_file, render_template, redirect, url_for
 from flask_cors import CORS
 import mysql.connector
 import os
@@ -9,7 +9,7 @@ import bcrypt
 from datetime import datetime
 from werkzeug.utils import secure_filename
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='.')
 CORS(app)
 
 # === KONFIGURASI DATABASE ===
@@ -44,7 +44,15 @@ def detect_mime_type(filename):
 
 @app.route('/')
 def index():
-    return "Aplikasi backend UKM FKDK berjalan!"
+    return redirect(url_for('loginPage'))
+
+@app.route('/loginPage')
+def loginPage():
+     return render_template('Login/Login.html')
+
+@app.route('/dasboard')
+def dashboardPage():
+     return render_template('Dashboard/Dashboard.html')
 
 # === ENDPOINT AUTH ===
 # Register
@@ -68,22 +76,23 @@ def register():
     cursor.close(); conn.close()
     return jsonify({"message": "Registrasi berhasil!"}), 201
 
-# Login
+# Login  
+    
 @app.route('/login', methods=['POST'])
 def login():
-    data = request.get_json()
-    username = data.get('username')
-    password = data.get('password')
-    if username == "fkdk" and password == "janissary":
-        return jsonify({"message": "Login admin berhasil", "role": "admin"}), 200
-    conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT username, password_hash FROM users WHERE username = %s", (username,))
-    user = cursor.fetchone()
-    cursor.close(); conn.close()
-    if user and bcrypt.checkpw(password.encode(), user['password_hash'].encode()):
-        return jsonify({"message": "Login berhasil", "role": "user", "username": user['username']}), 200
-    return jsonify({"error": "Login gagal"}), 401
+        data = request.get_json()
+        username = data.get('username')
+        password = data.get('password')
+        if username == "fkdk" and password == "janissary":
+            return jsonify({"message": "Login admin berhasil", "role": "admin"}), 200
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT username, password_hash FROM users WHERE username = %s", (username,))
+        user = cursor.fetchone()
+        cursor.close(); conn.close()
+        if user and bcrypt.checkpw(password.encode(), user['password_hash'].encode()):
+            return jsonify({"message": "Login berhasil", "role": "user", "username": user['username']}), 200
+        return jsonify({"error": "Login gagal"}), 401
     
 @app.route('/submit_proposal', methods=['POST'])
 def submit_proposal():

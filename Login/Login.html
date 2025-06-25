@@ -70,7 +70,7 @@
 
     <div class="container-wrapper">
         <div class="left-section">
-            <img src="../Static/FKDK.png" alt="FKDK Unsika">
+            <img src="{{ url_for('static', filename='FKDK.png') }}" alt="FKDK Unsika">
             <p><strong>Forum Komunikasi Dakwah Kampus</strong></p>
             <h5>Universitas Singaperbangsa Karawang</h5>
         </div>
@@ -102,7 +102,7 @@
             let password = document.getElementById("password").value;
 
             try {
-                const response = await fetch('http://localhost:5000/login', { // Sesuaikan URL dengan backend Anda
+                const response = await fetch('http://localhost:8000/login', { // Sesuaikan URL dengan backend Anda
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -115,7 +115,7 @@
                 if (response.ok) {
                     sessionStorage.setItem("role", data.role);
                     sessionStorage.setItem("username", data.username);
-                    window.location.href = "../Dashboard/Dashboard.html"; // Sesuaikan path Dashboard Anda
+                    window.location.href = "http://localhost:8000/dasboard"; // Sesuaikan path Dashboard Anda
                 } else {
                     alert(data.error || "Login gagal.");
                 }
