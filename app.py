@@ -1,5 +1,5 @@
 # app.py
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify, send_file, redirect, url_for
 from flask_cors import CORS
 import mysql.connector
 import os
@@ -44,7 +44,7 @@ def detect_mime_type(filename):
 
 @app.route('/')
 def index():
-    return "Aplikasi backend UKM FKDK berjalan!"
+    return redirect(url_for('/Login/Login.html'))
 
 # === ENDPOINT AUTH ===
 # Register
