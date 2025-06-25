@@ -1,2 +1,5 @@
 [phases.setup]
-aptPkgs = ["default-libmysqlclient-dev", "pkg-config"]
+nixPkgs = ["python3", "gcc", "mysql80", "pkg-config"]
+
+[phases.install]
+cmds = ["pip install -r requirements.txt"]
