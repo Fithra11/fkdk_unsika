@@ -193,12 +193,12 @@
         </div>
 
         <div class="container mt-4 table-container">
-            <h3><i class="fas fa-book"></i> Data LPJ</h3>
-            <table class="table table-bordered table-striped" id="lpjTable">
+            <h3><i class="fas fa-book"></i> Data Surat-menyurat</h3>
+            <table class="table table-bordered table-striped" id="suratmenyuratTable">
                 <thead class="table-dark">
-                    <tr id="lpjHeader">
+                    <tr id="suratmenyuratHeader">
                         <th>No</th>
-                        <th>Tanggal LPJ Masuk</th>
+                        <th>Tanggal Surat Masuk</th>
                         <th>Proker Departemen</th>
                         <th>Nama Proker</th>
                         <th>Sekretaris Pelaksana</th>
@@ -206,7 +206,7 @@
                         <th>Tanggal Disetujui</th>
                     </tr>
                 </thead>
-                <tbody id="lpjBody"></tbody>
+                <tbody id="suratmenyuratBody"></tbody>
             </table>
         </div>
     </div>
@@ -219,7 +219,7 @@
 
             if (role === "admin") {
                 $("#username").text("Halo, Admin FKDK");
-                $("#lpjHeader").append("<th>Action</th>");
+                $("#suratmenyuratHeader").append("<th>Action</th>");
             } else {
                 $("#username").text("Halo, " + username);
             }
@@ -240,16 +240,16 @@
                 window.location.href = "../Login/Login.html";
             });
 
-            function loadRiwayatLPJ() {
+            function loadRiwayatSuratmenyurat() {
                 // Ambil data dari backend Flask
-                fetch('http://127.0.0.1:5000/get_lpjs') // Sesuaikan URL Flask Anda
+                fetch('http://127.0.0.1:5000/get_suratmenyurat') // Sesuaikan URL Flask Anda
                     .then(response => response.json())
                     .then(data => {
-                        $("#lpjBody").empty();
+                        $("#suratmenyuratBody").empty();
                         data.forEach((item, index) => {
                             let dokumenCell = '-';
                             if (item.dokumenName && item.dokumenBase64) {
-                                dokumenCell = `<a href="http://127.0.0.1:5000/download_lpj/${item.id}" target="_blank" class="btn btn-sm btn-primary download-btn" data-id="${item.id}">
+                                dokumenCell = `<a href="http://127.0.0.1:5000/download_suratmenyurat/${item.id}" target="_blank" class="btn btn-sm btn-primary download-btn" data-id="${item.id}">
                                 <i class="fas fa-download me-1"></i> Download File
                             </a>`;
                             } else if (item.dokumenName) {
@@ -278,22 +278,22 @@
                             }
 
                             row += `</tr>`;
-                            $("#lpjBody").append(row);
+                            $("#suratmenyuratBody").append(row);
                         });
                     })
                     .catch(error => {
-                        console.error('Error fetching lpjs:', error);
-                        alert("Terjadi kesalahan saat memuat data lpj.");
+                        console.error('Error fetching suratmenyurat:', error);
+                        alert("Terjadi kesalahan saat memuat data suratmenyurat.");
                     });
             }
 
-            loadRiwayatLPJ(); // Panggil fungsi untuk memuat data saat halaman dimuat
+            loadRiwayatSuratmenyurat(); // Panggil fungsi untuk memuat data saat halaman dimuat
 
             // Event handler untuk tombol Edit
-            $("#lpjTable").on("click", ".edit-btn", function () {
+            $("#suratmenyuratTable").on("click", ".edit-btn", function () {
                 const row = $(this).closest("tr");
                 const cols = row.find("td");
-                const lpjId = $(this).data("id"); // Ambil ID lpj dari data-id
+                const suratmenyuratId = $(this).data("id"); // Ambil ID suratmenyurat dari data-id
                 let currentData = {};
 
                 if ($(this).text().includes("Edit")) {
@@ -361,25 +361,25 @@
                         reader.onload = function (event) {
                             updatedData.dokumenName = file.name;
                             updatedData.dokumenBase64 = event.target.result; // Base64 data
-                            sendUpdate(lpjId, updatedData);
+                            sendUpdate(suratmenyuratId, updatedData);
                         };
                         reader.readAsDataURL(file);
                     } else {
                         // Jika tidak ada file baru, ambil dokumenName dan dokumenBase64 dari server
-                        fetch(`http://127.0.0.1:5000/get_lpjs`) // Ambil data lengkap untuk mendapatkan dokumen
+                        fetch(`http://127.0.0.1:5000/get_suratmenyurat`) // Ambil data lengkap untuk mendapatkan dokumen
                             .then(res => res.json())
-                            .then(lpjs => {
-                                const originalLPJ = lpjs.find(p => p.id === lpjId);
-                                if (originalLPJ) {
-                                    updatedData.dokumenName = originalLPJ.dokumenName;
-                                    updatedData.dokumenBase64 = originalLPJ.dokumenBase64;
+                            .then(suratmenyurat => {
+                                const originalSuratmenyurat = suratmenyurat.find(p => p.id === suratmenyuratId);
+                                if (originalSuratmenyurat) {
+                                    updatedData.dokumenName = originalSuratmenyurat.dokumenName;
+                                    updatedData.dokumenBase64 = originalSuratmenyurat.dokumenBase64;
                                 }
-                                sendUpdate(lpjId, updatedData);
+                                sendUpdate(suratmenyuratId, updatedData);
                             });
                     }
 
                     function sendUpdate(id, dataToUpdate) {
-                        fetch(`http://127.0.0.1:5000/update_lpj/${id}`, { // Sesuaikan URL Flask Anda
+                        fetch(`http://127.0.0.1:5000/update_suratmenyurat/${id}`, { // Sesuaikan URL Flask Anda
                             method: 'PUT',
                             headers: {
                                 'Content-Type': 'application/json'
@@ -391,39 +391,39 @@
                                 if (result.message) {
                                     alert(result.message);
                                     $(this).html('<i class="fas fa-edit"></i> Edit');
-                                    loadRiwayatLPJ(); // Muat ulang data setelah update
+                                    loadRiwayatSuratmenyurat(); // Muat ulang data setelah update
                                 } else {
                                     alert("Error: " + result.error);
                                 }
                             })
                             .catch(error => {
-                                console.error('Error updating lpj:', error);
-                                alert("Terjadi kesalahan saat mengupdate lpj.");
+                                console.error('Error updating suratmenyurat:', error);
+                                alert("Terjadi kesalahan saat mengupdate suratmenyurat.");
                             });
                     }
                 }
             });
 
             // Event handler untuk tombol Delete
-            $("#lpjTable").on("click", ".delete-btn", function () {
+            $("#suratmenyuratTable").on("click", ".delete-btn", function () {
                 if (confirm("Yakin ingin menghapus data ini?")) {
-                    const lpjId = $(this).data("id"); // Ambil ID lpj dari data-id
+                    const suratmenyuratId = $(this).data("id"); // Ambil ID suratmenyurat dari data-id
 
-                    fetch(`http://127.0.0.1:5000/delete_lpj/${lpjId}`, { // Sesuaikan URL Flask Anda
+                    fetch(`http://127.0.0.1:5000/delete_suratmenyurat/${suratmenyuratId}`, { // Sesuaikan URL Flask Anda
                         method: 'DELETE'
                     })
                         .then(response => response.json())
                         .then(data => {
                             if (data.message) {
                                 alert(data.message);
-                                loadRiwayatLPJ(); // Muat ulang data setelah delete
+                                loadRiwayatSuratmenyurat(); // Muat ulang data setelah delete
                             } else {
                                 alert("Error: " + data.error);
                             }
                         })
                         .catch(error => {
-                            console.error('Error deleting lpj:', error);
-                            alert("Terjadi kesalahan saat menghapus lpj.");
+                            console.error('Error deleting suratmenyurat:', error);
+                            alert("Terjadi kesalahan saat menghapus suratmenyurat.");
                         });
                 }
             });

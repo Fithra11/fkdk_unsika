@@ -14,11 +14,10 @@ CORS(app)
 
 # === KONFIGURASI DATABASE ===
 DB_CONFIG = {
-    'host': os.getenv('DB_HOST', 'yamabiko.proxy.rlwy.net'), # Default jika variabel lingkungan tidak ditemukan (opsional)
-    'user': os.getenv('DB_USER', 'root'),
-    'password': os.getenv('DB_PASSWORD', 'LfbIfgJacUolfgMEkxbVDhaExXoxxPhZ'),
-    'database': os.getenv('DB_DATABASE', 'railway'),
-    'port': int(os.getenv('DB_PORT', 35739)) # Pastikan dikonversi ke integer
+    'host': 'localhost',
+    'user': 'root',
+    'password': '',
+    'database': 'skripsi'
 }
 
 # === FOLDER UPLOAD ===
@@ -82,7 +81,7 @@ def login():
     user = cursor.fetchone()
     cursor.close(); conn.close()
     if user and bcrypt.checkpw(password.encode(), user['password_hash'].encode()):
-        return jsonify({"message": "Login berhasil", "role": "user", "username": user['username']}), 200
+        return jsonify({"message": "Login berhasil", "role": "user"}), 200
     return jsonify({"error": "Login gagal"}), 401
     
 @app.route('/submit_proposal', methods=['POST'])
@@ -134,7 +133,7 @@ def get_proposals():
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True) # Mengembalikan hasil sebagai dictionary
-        cursor.execute("SELECT id, tanggalMasuk, departemen, namaProker, sekretaris, dokumenName, tanggalDisetujui, dokumenBase64 FROM proposal")
+        cursor.execute("SELECT id, tanggalMasuk, departemen, namaProker, sekretaris, dokumenName, tanggalDisetujui, dokumenBase64 FROM Proposal")
         proposals = cursor.fetchall()
         cursor.close()
         conn.close()
@@ -321,7 +320,7 @@ def get_lpjs():
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True) # Mengembalikan hasil sebagai dictionary
-        cursor.execute("SELECT id, tanggalMasuk, departemen, namaProker, sekretaris, dokumenName, tanggalDisetujui, dokumenBase64 FROM lpj")
+        cursor.execute("SELECT id, tanggalMasuk, departemen, namaProker, sekretaris, dokumenName, tanggalDisetujui, dokumenBase64 FROM LPJ")
         lpjs = cursor.fetchall()
         cursor.close()
         conn.close()
@@ -880,7 +879,7 @@ def get_rabs():
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True) # Mengembalikan hasil sebagai dictionary
-        cursor.execute("SELECT id, tanggalMasuk, departemen, namaProker, bendahara, dokumenName, tanggalDisetujui, dokumenBase64 FROM rab")
+        cursor.execute("SELECT id, tanggalMasuk, departemen, namaProker, bendahara, dokumenName, tanggalDisetujui, dokumenBase64 FROM RAB")
         rabs = cursor.fetchall()
         cursor.close()
         conn.close()
@@ -1067,7 +1066,7 @@ def get_lras():
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True) # Mengembalikan hasil sebagai dictionary
-        cursor.execute("SELECT id, tanggalMasuk, departemen, namaProker, bendahara, dokumenName, tanggalDisetujui, dokumenBase64 FROM lra")
+        cursor.execute("SELECT id, tanggalMasuk, departemen, namaProker, bendahara, dokumenName, tanggalDisetujui, dokumenBase64 FROM LRA")
         lras = cursor.fetchall()
         cursor.close()
         conn.close()
@@ -1203,225 +1202,6 @@ def delete_lra(lra_id):
         return jsonify({"error": f"Kesalahan database: {err}"}), 500
     except Exception as e:
         print(f"Error deleting LRA: {e}")
-        return jsonify({"error": f"Terjadi kesalahan internal: {e}"}), 500
-
-@app.route('/submit_suratmenyurat', methods=['POST'])
-def submit_suratmenyurat():
-    """
-    Endpoint untuk mengirim data suratmenyurat baru ke database.
-    Menerima data JSON termasuk dokumen dalam format base64.
-    """
-    try:
-        data = request.get_json()
-        if not data:
-            return jsonify({"error": "Tidak ada data JSON yang diterima"}), 400
-
-        # Ambil data dari payload JSON
-        tanggal_masuk = data.get('tanggalMasuk')
-        departemen = data.get('departemen')
-        nama_proker = data.get('namaProker') # Dapat diinterpretasikan sebagai 'namaKegiatan' atau 'judulSurat'
-        sekretaris = data.get('sekretaris')
-        dokumen_name = data.get('dokumenName')
-        dokumen_base64 = data.get('dokumenBase64')
-
-        # Validasi data yang diterima
-        if not all([tanggal_masuk, departemen, nama_proker, sekretaris, dokumen_name, dokumen_base64]):
-            return jsonify({"error": "Data suratmenyurat tidak lengkap. Pastikan semua field terisi, termasuk dokumen."}), 400
-
-        # Hapus "data:mimetype;base64," prefix jika ada pada string base64
-        if ',' in dokumen_base64:
-            dokumen_base64 = dokumen_base64.split(',')[1]
-
-        conn = get_db_connection()
-        cursor = conn.cursor()
-
-        # Query INSERT untuk menyimpan data ke tabel 'Suratmenyurat'
-        insert_query = """
-        INSERT INTO Suratmenyurat (tanggalMasuk, departemen, namaProker, sekretaris, dokumenName, dokumenBase64)
-        VALUES (%s, %s, %s, %s, %s, %s)
-        """
-        cursor.execute(insert_query, (tanggal_masuk, departemen, nama_proker, sekretaris, dokumen_name, dokumen_base64))
-        conn.commit() # Komit perubahan ke database
-
-        cursor.close()
-        conn.close()
-
-        return jsonify({"message": "Suratmenyurat berhasil dikirim!"}), 200
-
-    except mysql.connector.Error as err:
-        print(f"MySQL Error: {err}")
-        return jsonify({"error": f"Kesalahan database: {err}"}), 500
-    except Exception as e:
-        print(f"Error submitting suratmenyurat: {e}")
-        return jsonify({"error": f"Terjadi kesalahan internal: {e}"}), 500
-
-@app.route('/get_suratmenyurat', methods=['GET'])
-def get_suratmenyurat():
-    """
-    Endpoint untuk mengambil semua data suratmenyurat dari database.
-    Mengembalikan daftar suratmenyurat dalam format JSON.
-    """
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor(dictionary=True) # Mengembalikan hasil sebagai dictionary untuk kemudahan akses
-        # Ambil semua kolom, termasuk dokumenBase64 jika diperlukan oleh frontend untuk display/preview
-        cursor.execute("SELECT id, tanggalMasuk, departemen, namaProker, sekretaris, dokumenName, tanggalDisetujui, dokumenBase64 FROM Suratmenyurat")
-        suratmenyurat_list = cursor.fetchall()
-        cursor.close()
-        conn.close()
-
-        # Format tanggal agar sesuai dengan yang diharapkan oleh frontend (YYYY-MM-DD)
-        for suratmenyurat in suratmenyurat_list:
-            if suratmenyurat['tanggalMasuk']:
-                suratmenyurat['tanggalMasuk'] = suratmenyurat['tanggalMasuk'].strftime('%Y-%m-%d')
-            if suratmenyurat['tanggalDisetujui']:
-                suratmenyurat['tanggalDisetujui'] = suratmenyurat['tanggalDisetujui'].strftime('%Y-%m-%d')
-            else:
-                suratmenyurat['tanggalDisetujui'] = '-' # Jika tanggalDisetujui null, tampilkan '-'
-
-        return jsonify(suratmenyurat_list), 200
-    except mysql.connector.Error as err:
-        print(f"MySQL Error: {err}")
-        return jsonify({"error": f"Kesalahan database: {err}"}), 500
-    except Exception as e:
-        print(f"Error fetching suratmenyurat: {e}")
-        return jsonify({"error": f"Terjadi kesalahan internal: {e}"}), 500
-
-@app.route('/download_suratmenyurat/<int:suratmenyurat_id>', methods=['GET'])
-def download_suratmenyurat(suratmenyurat_id):
-    """
-    Endpoint untuk mengunduh dokumen suratmenyurat berdasarkan ID.
-    Mendekode string base64 dan mengirimkannya sebagai file.
-    """
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor(dictionary=True)
-        # Ambil dokumenName dan dokumenBase64 untuk suratmenyurat dengan ID tertentu
-        cursor.execute("SELECT dokumenName, dokumenBase64 FROM Suratmenyurat WHERE id = %s", (suratmenyurat_id,))
-        suratmenyurat = cursor.fetchone()
-        cursor.close()
-        conn.close()
-
-        if suratmenyurat and suratmenyurat['dokumenBase64']:
-            dokumen_name = suratmenyurat['dokumenName']
-            dokumen_base64 = suratmenyurat['dokumenBase64']
-
-            # Deteksi MIME type dari base64 string jika ada, atau tebak dari ekstensi file
-            # Contoh: 'data:application/pdf;base64,...'
-            mime_type = 'application/octet-stream' # Default
-            if ',' in dokumen_base64:
-                header_part = dokumen_base64.split(',')[0]
-                if 'data:' in header_part and ';' in header_part:
-                    mime_type = header_part.split(':')[1].split(';')[0]
-                base64_data = dokumen_base64.split(',')[1]
-            else:
-                base64_data = dokumen_base64
-                # Fallback: tebak MIME type dari ekstensi file jika tidak ada header URI data
-                ext = os.path.splitext(dokumen_name)[1].lower()
-                if ext == '.pdf':
-                    mime_type = 'application/pdf'
-                elif ext == '.doc' or ext == '.docx':
-                    mime_type = 'application/msword' # atau application/vnd.openxmlformats-officedocument.wordprocessingml.document
-                elif ext == '.txt':
-                    mime_type = 'text/plain'
-                elif ext == '.png':
-                    mime_type = 'image/png'
-                elif ext == '.jpg' or ext == '.jpeg':
-                    mime_type = 'image/jpeg'
-                # Tambahkan tipe MIME lainnya sesuai kebutuhan
-
-            file_bytes = base64.b64decode(base64_data)
-            return send_file(BytesIO(file_bytes),
-                             mimetype=mime_type,
-                             as_attachment=True, # Memaksa browser untuk mengunduh file
-                             download_name=dokumen_name) # Nama file saat diunduh
-        else:
-            return jsonify({"error": "Dokumen tidak ditemukan atau data kosong."}), 404
-    except mysql.connector.Error as err:
-        print(f"MySQL Error: {err}")
-        return jsonify({"error": f"Kesalahan database: {err}"}), 500
-    except Exception as e:
-        print(f"Error downloading suratmenyurat: {e}")
-        return jsonify({"error": f"Terjadi kesalahan internal: {e}"}), 500
-
-@app.route('/update_suratmenyurat/<int:suratmenyurat_id>', methods=['PUT'])
-def update_suratmenyurat(suratmenyurat_id):
-    """
-    Endpoint untuk memperbarui data suratmenyurat yang sudah ada berdasarkan ID.
-    """
-    try:
-        data = request.get_json()
-        if not data:
-            return jsonify({"error": "Tidak ada data JSON yang diterima"}), 400
-
-        # Ambil data yang akan diperbarui
-        tanggal_masuk = data.get('tanggalMasuk')
-        departemen = data.get('departemen')
-        nama_proker = data.get('namaProker')
-        sekretaris = data.get('sekretaris')
-        dokumen_name = data.get('dokumenName')
-        dokumen_base64 = data.get('dokumenBase64')
-        tanggal_disetujui = data.get('tanggalDisetujui') # Bisa berupa tanggal atau None/null
-
-        conn = get_db_connection()
-        cursor = conn.cursor()
-
-        # Jika dokumen_base64 ada dan mengandung prefix, hapus
-        if dokumen_base64 and ',' in dokumen_base64:
-            dokumen_base64 = dokumen_base64.split(',')[1]
-
-        # Query UPDATE untuk memperbarui data di tabel 'Suratmenyurat'
-        update_query = """
-        UPDATE Suratmenyurat
-        SET tanggalMasuk = %s, departemen = %s, namaProker = %s, sekretaris = %s,
-            dokumenName = %s, dokumenBase64 = %s, tanggalDisetujui = %s
-        WHERE id = %s
-        """
-        cursor.execute(update_query, (
-            tanggal_masuk, departemen, nama_proker, sekretaris,
-            dokumen_name, dokumen_base64, tanggal_disetujui, suratmenyurat_id
-        ))
-        conn.commit()
-
-        if cursor.rowcount == 0:
-            return jsonify({"error": "Suratmenyurat tidak ditemukan."}), 404
-
-        cursor.close()
-        conn.close()
-
-        return jsonify({"message": "Suratmenyurat berhasil diupdate!"}), 200
-
-    except mysql.connector.Error as err:
-        print(f"MySQL Error: {err}")
-        return jsonify({"error": f"Kesalahan database: {err}"}), 500
-    except Exception as e:
-        print(f"Error updating suratmenyurat: {e}")
-        return jsonify({"error": f"Terjadi kesalahan internal: {e}"}), 500
-
-@app.route('/delete_suratmenyurat/<int:suratmenyurat_id>', methods=['DELETE'])
-def delete_suratmenyurat(suratmenyurat_id):
-    """
-    Endpoint untuk menghapus data suratmenyurat berdasarkan ID.
-    """
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        # Query DELETE untuk menghapus data dari tabel 'Suratmenyurat'
-        cursor.execute("DELETE FROM Suratmenyurat WHERE id = %s", (suratmenyurat_id,))
-        conn.commit()
-
-        if cursor.rowcount == 0:
-            return jsonify({"error": "Suratmenyurat tidak ditemukan."}), 404
-
-        cursor.close()
-        conn.close()
-
-        return jsonify({"message": "Suratmenyurat berhasil dihapus!"}), 200
-    except mysql.connector.Error as err:
-        print(f"MySQL Error: {err}")
-        return jsonify({"error": f"Kesalahan database: {err}"}), 500
-    except Exception as e:
-        print(f"Error deleting suratmenyurat: {e}")
         return jsonify({"error": f"Terjadi kesalahan internal: {e}"}), 500
 
 if __name__ == '__main__':
