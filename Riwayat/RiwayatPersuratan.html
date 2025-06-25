@@ -139,40 +139,40 @@
 <body>
     <div class="sidebar">
         <div class="logo">
-            <img src="../Static/FKDK.png" alt="Logo">
+            <img src="{{ url_for('static', filename='FKDK.png') }}" alt="Logo">
         </div>
         <ul>
-            <li class="navigate" data-url="../Dashboard/Dashboard.html"><i class="fas fa-home"></i> Dashboard</li>
+            <li class="navigate" data-url="./dasboard"><i class="fas fa-home"></i> Dashboard</li>
             <li class="has-submenu"><span><i class="fas fa-book"></i> Kesekretariatan</span> <i
                     class="fas fa-chevron-right arrow"></i></li>
             <ul class="submenu">
-                <li class="navigate" data-url="../User/ProposalUser.html">proposal</li>
-                <li class="navigate" data-url="../User/LPJUser.html">LPJ</li>
-                <li class="navigate" data-url="../User/Surat-menyuratUser.html">surat-menyurat</li>
-                <li class="navigate" data-url="../User/PersuratanUser.html">persuratan</li>
-                <li class="navigate" data-url="../User/InventarisUser.html">inventaris</li>
+                <li class="navigate" data-url="./proposalPage">proposal</li>
+                <li class="navigate" data-url="./lpjPage">LPJ</li>
+                <li class="navigate" data-url="./suratMenyuratPage">surat-menyurat</li>
+                <li class="navigate" data-url="./persuratanPage">persuratan</li>
+                <li class="navigate" data-url="./inventarisPage">inventaris</li>
             </ul>
             <li class="has-submenu"><span><i class="fas fa-coins"></i> Kebendaharaan</span> <i
                     class="fas fa-chevron-right arrow"></i></li>
             <ul class="submenu">
-                <li class="navigate" data-url="../User/PemasukanUser.html">pemasukan</li>
-                <li class="navigate" data-url="../User/PengeluaranUser.html">pengeluaran</li>
+                <li class="navigate" data-url="./pemasukanPage">pemasukan</li>
+                <li class="navigate" data-url="./pengeluaranPage">pengeluaran</li>
             </ul>
             <li class="has-submenu"><span><i class="fas fa-clock-rotate-left"></i> Riwayat</span> <i
                     class="fas fa-chevron-right arrow"></i></li>
             <ul class="submenu">
                 <li class="has-submenu"><span>KESEKRETARIATAN</span> <i class="fas fa-chevron-right arrow"></i></li>
                 <ul class="submenu">
-                    <li class="navigate" data-url="../Riwayat/RiwayatProposal.html">proposal</li>
-                    <li class="navigate" data-url="../Riwayat/RiwayatLPJ.html">LPJ</li>
-                    <li class="navigate" data-url="../Riwayat/RiwayatSurat-menyurat.html">surat-menyurat</li>
-                    <li class="navigate" data-url="../Riwayat/RiwayatPersuratan.html">persuratan</li>
-                    <li class="navigate" data-url="../Riwayat/RiwayatInventaris.html">inventaris</li>
+                    <li class="navigate" data-url="./riwayatProposalPage">proposal</li>
+                    <li class="navigate" data-url="./riwayatLpjPage">LPJ</li>
+                    <li class="navigate" data-url="./riwayatSuratMenyuratPage">surat-menyurat</li>
+                    <li class="navigate" data-url="./riwayatPersuratanPage">persuratan</li>
+                    <li class="navigate" data-url="./riwayatInventarisPage">inventaris</li>
                 </ul>
                 <li class="has-submenu"><span>KEBENDAHARAAN</span> <i class="fas fa-chevron-right arrow"></i></li>
                 <ul class="submenu">
-                    <li class="navigate" data-url="../Riwayat/RiwayatPemasukan.html">pemasukan</li>
-                    <li class="navigate" data-url="../Riwayat/RiwayatPengeluaran.html">pengeluaran</li>
+                    <li class="navigate" data-url="./riwayatPemasukanPage">pemasukan</li>
+                    <li class="navigate" data-url="./riwayatPengeluaranPage">pengeluaran</li>
                 </ul>
             </ul>
         </ul>
@@ -236,14 +236,14 @@
             $("#logout").click(function () {
                 alert("Anda telah logout!");
                 sessionStorage.clear();
-                window.location.href = "../Login/Login.html";
+                window.location.href = "./loginPage";
             });
 
             // Function untuk mengambil dan merender data dari Flask
             function renderTable() {
                 $("#tableBody").empty();
                 $.ajax({
-                    url: "http://127.0.0.1:5000/persuratan", // Endpoint untuk mendapatkan semua data
+                    url: "./persuratan", // Endpoint untuk mendapatkan semua data
                     type: "GET",
                     success: function (data) {
                         data.forEach((item, index) => {
@@ -297,7 +297,7 @@
                     }
 
                     // Mengirim permintaan download ke Flask
-                    window.location.href = `http://127.0.0.1:5000/download_file/${persuratanId}`;
+                    window.location.href = `./download_file/${persuratanId}`;
                 });
             }
 
@@ -436,7 +436,7 @@
 
                     // Kirim data ke backend Flask
                     $.ajax({
-                        url: `http://127.0.0.1:5000/persuratan/${persuratanId}`, // Endpoint untuk update
+                        url: `./persuratan/${persuratanId}`, // Endpoint untuk update
                         type: "PUT",
                         data: formData,
                         processData: false, // Don't process the data
@@ -458,7 +458,7 @@
 
                         // Mengirim permintaan delete ke Flask
                         $.ajax({
-                            url: `http://127.0.0.1:5000/persuratan/${persuratanId}`, // Endpoint untuk delete
+                            url: `./persuratan/${persuratanId}`, // Endpoint untuk delete
                             type: "DELETE",
                             success: function (response) {
                                 alert(response.message);

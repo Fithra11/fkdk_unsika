@@ -141,40 +141,40 @@
 <body>
     <div class="sidebar">
         <div class="logo">
-            <img src="../Static/FKDK.png" alt="Logo" />
+            <img src="{{ url_for('static', filename='FKDK.png') }}" alt="Logo">
         </div>
         <ul>
-            <li class="navigate" data-url="../Dashboard/Dashboard.html"><i class="fas fa-home"></i> Dashboard</li>
+            <li class="navigate" data-url="./dasboard"><i class="fas fa-home"></i> Dashboard</li>
             <li class="has-submenu"><span><i class="fas fa-book"></i> Kesekretariatan</span> <i
                     class="fas fa-chevron-right arrow"></i></li>
             <ul class="submenu">
-                <li class="navigate" data-url="../User/ProposalUser.html">proposal</li>
-                <li class="navigate" data-url="../User/LPJUser.html">LPJ</li>
-                <li class="navigate" data-url="../User/Surat-menyuratUser.html">surat-menyurat</li>
-                <li class="navigate" data-url="../User/PersuratanUser.html">persuratan</li>
-                <li class="navigate" data-url="../User/InventarisUser.html">inventaris</li>
+                <li class="navigate" data-url="./proposalPage">proposal</li>
+                <li class="navigate" data-url="./lpjPage">LPJ</li>
+                <li class="navigate" data-url="./suratMenyuratPage">surat-menyurat</li>
+                <li class="navigate" data-url="./persuratanPage">persuratan</li>
+                <li class="navigate" data-url="./inventarisPage">inventaris</li>
             </ul>
             <li class="has-submenu"><span><i class="fas fa-coins"></i> Kebendaharaan</span> <i
                     class="fas fa-chevron-right arrow"></i></li>
             <ul class="submenu">
-                <li class="navigate" data-url="../User/PemasukanUser.html">pemasukan</li>
-                <li class="navigate" data-url="../User/PengeluaranUser.html">pengeluaran</li>
+                <li class="navigate" data-url="./pemasukanPage">pemasukan</li>
+                <li class="navigate" data-url="./pengeluaranPage">pengeluaran</li>
             </ul>
             <li class="has-submenu"><span><i class="fas fa-clock-rotate-left"></i> Riwayat</span> <i
                     class="fas fa-chevron-right arrow"></i></li>
             <ul class="submenu">
                 <li class="has-submenu"><span>KESEKRETARIATAN</span> <i class="fas fa-chevron-right arrow"></i></li>
                 <ul class="submenu">
-                    <li class="navigate" data-url="../Riwayat/RiwayatProposal.html">proposal</li>
-                    <li class="navigate" data-url="../Riwayat/RiwayatLPJ.html">LPJ</li>
-                    <li class="navigate" data-url="../Riwayat/RiwayatSurat-menyurat.html">surat-menyurat</li>
-                    <li class="navigate" data-url="../Riwayat/RiwayatPersuratan.html">persuratan</li>
-                    <li class="navigate" data-url="../Riwayat/RiwayatInventaris.html">inventaris</li>
+                    <li class="navigate" data-url="./riwayatProposalPage">proposal</li>
+                    <li class="navigate" data-url="./riwayatLpjPage">LPJ</li>
+                    <li class="navigate" data-url="./riwayatSuratMenyuratPage">surat-menyurat</li>
+                    <li class="navigate" data-url="./riwayatPersuratanPage">persuratan</li>
+                    <li class="navigate" data-url="./riwayatInventarisPage">inventaris</li>
                 </ul>
                 <li class="has-submenu"><span>KEBENDAHARAAN</span> <i class="fas fa-chevron-right arrow"></i></li>
                 <ul class="submenu">
-                    <li class="navigate" data-url="../Riwayat/RiwayatPemasukan.html">pemasukan</li>
-                    <li class="navigate" data-url="../Riwayat/RiwayatPengeluaran.html">pengeluaran</li>
+                    <li class="navigate" data-url="./riwayatPemasukanPage">pemasukan</li>
+                    <li class="navigate" data-url="./riwayatPengeluaranPage">pengeluaran</li>
                 </ul>
             </ul>
         </ul>
@@ -237,19 +237,19 @@
             $("#logout").click(function () {
                 alert("Anda telah logout!");
                 sessionStorage.clear();
-                window.location.href = "../Login/Login.html";
+                window.location.href = "./loginPage";
             });
 
             function loadRiwayatLRA() {
                 // Ambil data dari backend Flask
-                fetch('http://127.0.0.1:5000/get_lras') // Sesuaikan URL Flask Anda
+                fetch('./get_lras') // Sesuaikan URL Flask Anda
                     .then(response => response.json())
                     .then(data => {
                         $("#lraBody").empty();
                         data.forEach((item, index) => {
                             let dokumenCell = '-';
                             if (item.dokumenName && item.dokumenBase64) {
-                                dokumenCell = `<a href="http://127.0.0.1:5000/download_lra/${item.id}" target="_blank" class="btn btn-sm btn-primary download-btn" data-id="${item.id}">
+                                dokumenCell = `<a href="./download_lra/${item.id}" target="_blank" class="btn btn-sm btn-primary download-btn" data-id="${item.id}">
                                 <i class="fas fa-download me-1"></i> Download File
                             </a>`;
                             } else if (item.dokumenName) {
@@ -366,7 +366,7 @@
                         reader.readAsDataURL(file);
                     } else {
                         // Jika tidak ada file baru, ambil dokumenName dan dokumenBase64 dari server
-                        fetch(`http://127.0.0.1:5000/get_lras`) // Ambil data lengkap untuk mendapatkan dokumen
+                        fetch(`./get_lras`) // Ambil data lengkap untuk mendapatkan dokumen
                             .then(res => res.json())
                             .then(lras => {
                                 const originalLRA = lras.find(p => p.id === lraId);
@@ -379,7 +379,7 @@
                     }
 
                     function sendUpdate(id, dataToUpdate) {
-                        fetch(`http://127.0.0.1:5000/update_lra/${id}`, { // Sesuaikan URL Flask Anda
+                        fetch(`./update_lra/${id}`, { // Sesuaikan URL Flask Anda
                             method: 'PUT',
                             headers: {
                                 'Content-Type': 'application/json'
@@ -409,7 +409,7 @@
                 if (confirm("Yakin ingin menghapus data ini?")) {
                     const lraId = $(this).data("id"); // Ambil ID LRA dari data-id
 
-                    fetch(`http://127.0.0.1:5000/delete_lra/${lraId}`, { // Sesuaikan URL Flask Anda
+                    fetch(`./delete_lra/${lraId}`, { // Sesuaikan URL Flask Anda
                         method: 'DELETE'
                     })
                         .then(response => response.json())

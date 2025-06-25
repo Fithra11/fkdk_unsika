@@ -49,10 +49,70 @@ def index():
 @app.route('/loginPage')
 def loginPage():
      return render_template('Login/Login.html')
+ 
+@app.route('/daftar')
+def daftar():
+     return render_template('Login/Daftar.html')
 
 @app.route('/dasboard')
 def dashboardPage():
      return render_template('Dashboard/Dashboard.html')
+ 
+@app.route('/proposalPage')
+def proposalUser():
+     return render_template('User/ProposalUser.html')
+ 
+@app.route('/lpjPage')
+def lpjPage():
+     return render_template('User/LPJUser.html')
+ 
+@app.route('/suratMenyuratPage')
+def suratMenyuratPage():
+     return render_template('User/Surat-menyuratUser.html')
+ 
+@app.route('/persuratanPage')
+def persuratanPage():
+     return render_template('User/PersuratanUser.html')
+ 
+@app.route('/inventarisPage')
+def inventarisPage():
+     return render_template('User/InventarisUser.html')
+ 
+@app.route('/pemasukanPage')
+def pemasukanPage():
+     return render_template('User/PemasukanUser.html')
+ 
+@app.route('/pengeluaranPage')
+def pengeluaranPage():
+     return render_template('User/PengeluaranUser.html')
+ 
+@app.route('/riwayatProposalPage')
+def riwayatProposalPage():
+     return render_template('Riwayat/RiwayatProposal.html')
+ 
+@app.route('/riwayatLpjPage')
+def riwayatLpjPage():
+     return render_template('Riwayat/RiwayatLPJ.html')
+ 
+@app.route('/riwayatSuratMenyuratPage')
+def riwayatSuratMenyuratPage():
+     return render_template('Riwayat/RiwayatSurat-menyurat.html')
+ 
+@app.route('/riwayatPersuratanPage')
+def riwayatPersuratanPage():
+     return render_template('Riwayat/RiwayatPersuratan.html')
+ 
+@app.route('/riwayatInventarisPage')
+def riwayatInventarisPage():
+     return render_template('Riwayat/RiwayatInventaris.html')
+ 
+@app.route('/riwayatPemasukanPage')
+def riwayatPemasukanPage():
+     return render_template('Riwayat/RiwayatPemasukan.html')
+ 
+@app.route('/riwayatPengeluaranPage')
+def riwayatPengeluaranPage():
+     return render_template('Riwayat/RiwayatPengeluaran.html')
 
 # === ENDPOINT AUTH ===
 # Register
@@ -120,7 +180,7 @@ def submit_proposal():
         cursor = conn.cursor()
 
         insert_query = """
-        INSERT INTO Proposal (tanggalMasuk, departemen, namaProker, sekretaris, dokumenName, dokumenBase64)
+        INSERT INTO proposal (tanggalMasuk, departemen, namaProker, sekretaris, dokumenName, dokumenBase64)
         VALUES (%s, %s, %s, %s, %s, %s)
         """
         cursor.execute(insert_query, (tanggal_masuk, departemen, nama_proker, sekretaris, dokumen_name, dokumen_base64))
@@ -170,7 +230,7 @@ def download_proposal(proposal_id):
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT dokumenName, dokumenBase64 FROM Proposal WHERE id = %s", (proposal_id,))
+        cursor.execute("SELECT dokumenName, dokumenBase64 FROM proposal WHERE id = %s", (proposal_id,))
         proposal = cursor.fetchone()
         cursor.close()
         conn.close()
@@ -233,7 +293,7 @@ def update_proposal(proposal_id):
         cursor = conn.cursor()
 
         update_query = """
-        UPDATE Proposal
+        UPDATE proposal
         SET tanggalMasuk = %s, departemen = %s, namaProker = %s, sekretaris = %s,
             dokumenName = %s, dokumenBase64 = %s, tanggalDisetujui = %s
         WHERE id = %s
@@ -264,7 +324,7 @@ def delete_proposal(proposal_id):
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("DELETE FROM Proposal WHERE id = %s", (proposal_id,))
+        cursor.execute("DELETE FROM proposal WHERE id = %s", (proposal_id,))
         conn.commit()
 
         if cursor.rowcount == 0:
@@ -357,7 +417,7 @@ def download_lpj(lpj_id):
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT dokumenName, dokumenBase64 FROM LPJ WHERE id = %s", (lpj_id,))
+        cursor.execute("SELECT dokumenName, dokumenBase64 FROM lpj WHERE id = %s", (lpj_id,))
         lpj = cursor.fetchone()
         cursor.close()
         conn.close()
@@ -420,7 +480,7 @@ def update_lpj(lpj_id):
         cursor = conn.cursor()
 
         update_query = """
-        UPDATE LPJ
+        UPDATE lpj
         SET tanggalMasuk = %s, departemen = %s, namaProker = %s, sekretaris = %s,
             dokumenName = %s, dokumenBase64 = %s, tanggalDisetujui = %s
         WHERE id = %s
@@ -451,7 +511,7 @@ def delete_lpj(lpj_id):
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("DELETE FROM LPJ WHERE id = %s", (lpj_id,))
+        cursor.execute("DELETE FROM lpj WHERE id = %s", (lpj_id,))
         conn.commit()
 
         if cursor.rowcount == 0:
@@ -866,7 +926,7 @@ def submit_rab():
         cursor = conn.cursor()
 
         insert_query = """
-        INSERT INTO RAB (tanggalMasuk, departemen, namaProker, bendahara, dokumenName, dokumenBase64)
+        INSERT INTO rab (tanggalMasuk, departemen, namaProker, bendahara, dokumenName, dokumenBase64)
         VALUES (%s, %s, %s, %s, %s, %s)
         """
         cursor.execute(insert_query, (tanggal_masuk, departemen, nama_proker, bendahara, dokumen_name, dokumen_base64))
@@ -916,7 +976,7 @@ def download_rab(rab_id):
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT dokumenName, dokumenBase64 FROM RAB WHERE id = %s", (rab_id,))
+        cursor.execute("SELECT dokumenName, dokumenBase64 FROM rab WHERE id = %s", (rab_id,))
         rab = cursor.fetchone()
         cursor.close()
         conn.close()
@@ -979,7 +1039,7 @@ def update_rab(rab_id):
         cursor = conn.cursor()
 
         update_query = """
-        UPDATE RAB
+        UPDATE rab
         SET tanggalMasuk = %s, departemen = %s, namaProker = %s, bendahara = %s,
             dokumenName = %s, dokumenBase64 = %s, tanggalDisetujui = %s
         WHERE id = %s
@@ -1010,7 +1070,7 @@ def delete_rab(rab_id):
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("DELETE FROM RAB WHERE id = %s", (rab_id,))
+        cursor.execute("DELETE FROM rab WHERE id = %s", (rab_id,))
         conn.commit()
 
         if cursor.rowcount == 0:
@@ -1053,7 +1113,7 @@ def submit_lra():
         cursor = conn.cursor()
 
         insert_query = """
-        INSERT INTO LRA (tanggalMasuk, departemen, namaProker, bendahara, dokumenName, dokumenBase64)
+        INSERT INTO lra (tanggalMasuk, departemen, namaProker, bendahara, dokumenName, dokumenBase64)
         VALUES (%s, %s, %s, %s, %s, %s)
         """
         cursor.execute(insert_query, (tanggal_masuk, departemen, nama_proker, bendahara, dokumen_name, dokumen_base64))
@@ -1103,7 +1163,7 @@ def download_lra(lra_id):
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT dokumenName, dokumenBase64 FROM LRA WHERE id = %s", (lra_id,))
+        cursor.execute("SELECT dokumenName, dokumenBase64 FROM lra WHERE id = %s", (lra_id,))
         lra = cursor.fetchone()
         cursor.close()
         conn.close()
@@ -1166,7 +1226,7 @@ def update_lra(lra_id):
         cursor = conn.cursor()
 
         update_query = """
-        UPDATE LRA
+        UPDATE lra
         SET tanggalMasuk = %s, departemen = %s, namaProker = %s, bendahara = %s,
             dokumenName = %s, dokumenBase64 = %s, tanggalDisetujui = %s
         WHERE id = %s
@@ -1197,7 +1257,7 @@ def delete_lra(lra_id):
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("DELETE FROM LRA WHERE id = %s", (lra_id,))
+        cursor.execute("DELETE FROM lra WHERE id = %s", (lra_id,))
         conn.commit()
 
         if cursor.rowcount == 0:
@@ -1435,3 +1495,6 @@ def delete_suratmenyurat(suratmenyurat_id):
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8000)
+    
+# if __name__ == '__main__':
+#     app.run(debug=True, port=5000)

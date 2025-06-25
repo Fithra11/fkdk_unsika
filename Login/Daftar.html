@@ -54,7 +54,7 @@
             </div>
             <button type="submit" class="btn btn-success w-100">Daftar</button>
             <div class="text-center mt-3">
-                <p>Sudah punya akun? <a href="Login.html">Login</a></p>
+                <p>Sudah punya akun? <a href="./loginPage">Login</a></p>
             </div>
         </form>
     </div>
@@ -83,7 +83,7 @@
             }
 
             try {
-                const response = await fetch('http://localhost:5000/register', { // Sesuaikan URL dengan backend Anda
+                const response = await fetch('./register', { // Sesuaikan URL dengan backend Anda
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -99,7 +99,7 @@
 
                 if (response.ok) {
                     alert(data.message);
-                    window.location.href = "Login.html"; // Redirect langsung ke halaman login
+                    window.location.href = "./loginPage"; // Redirect langsung ke halaman login
                 } else {
                     alert(data.error || "Pendaftaran gagal.");
                 }
