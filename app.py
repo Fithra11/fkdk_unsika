@@ -44,7 +44,7 @@ def detect_mime_type(filename):
 
 @app.route('/')
 def index():
-    return redirect(url_for('/Login/Login.html'))
+    return redirect(url_for('login'))
 
 # === ENDPOINT AUTH ===
 # Register
