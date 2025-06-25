@@ -115,7 +115,7 @@
                 if (response.ok) {
                     sessionStorage.setItem("role", data.role);
                     sessionStorage.setItem("username", data.username);
-                    window.location.href = "http://localhost:8000/dasboard"; // Sesuaikan path Dashboard Anda
+                    window.location.href = "./dasboard"; // Sesuaikan path Dashboard Anda
                 } else {
                     alert(data.error || "Login gagal.");
                 }
