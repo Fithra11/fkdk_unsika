@@ -1,5 +1,5 @@
 # app.py
-from flask import Flask, request, jsonify, send_file, redirect, url_for
+from flask import Flask, request, jsonify, send_file, redirect, url_for, render_template
 from flask_cors import CORS
 import mysql.connector
 import os
@@ -45,6 +45,10 @@ def detect_mime_type(filename):
 @app.route('/')
 def index():
     return redirect(url_for('login'))
+
+@app.route('/login')
+def login():
+    return render_template('Login.html') 
 
 # === ENDPOINT AUTH ===
 # Register
