@@ -1,5 +1,5 @@
 # app.py
-from flask import Flask, request, jsonify, send_file, redirect, url_for, render_template
+from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 import mysql.connector
 import os
@@ -44,93 +44,7 @@ def detect_mime_type(filename):
 
 @app.route('/')
 def index():
-    return redirect(url_for('login'))
-
-# Route utama - redirect ke login
-@app.route('/')
-def index():
-    return redirect(url_for('login'))
-
-# ===== DASHBOARD ROUTES =====
-@app.route('/dashboard')
-def dashboard():
-    return render_template('Dashboard/Dashboard.html')
-
-# ===== LOGIN ROUTES =====
-@app.route('/login')
-def login():
-    return render_template('Login/Login.html')
-
-@app.route('/daftar')
-def daftar():
-    return render_template('Login/Daftar.html')
-
-# ===== RIWAYAT ROUTES =====
-@app.route('/riwayat-inventaris')
-def riwayat_inventaris():
-    return render_template('Riwayat/RiwayatInventaris.html')
-
-@app.route('/riwayat-lp')
-def riwayat_lp():
-    return render_template('Riwayat/RiwayatLP.html')
-
-@app.route('/riwayat-pemasukan')
-def riwayat_pemasukan():
-    return render_template('Riwayat/RiwayatPemasukan.html')
-
-@app.route('/riwayat-pengeluaran')
-def riwayat_pengeluaran():
-    return render_template('Riwayat/RiwayatPengeluaran.html')
-
-@app.route('/riwayat-persuratan')
-def riwayat_persuratan():
-    return render_template('Riwayat/RiwayatPersuratan.html')
-
-@app.route('/riwayat-proposal')
-def riwayat_proposal():
-    return render_template('Riwayat/RiwayatProposal.html')
-
-@app.route('/riwayat-surat-menyurat')
-def riwayat_surat_menyurat():
-    return render_template('Riwayat/RiwayatSurat-menyurat.html')
-
-# ===== USER ROUTES =====
-@app.route('/inventaris-user')
-def inventaris_user():
-    return render_template('User/InventarisUser.html')
-
-@app.route('/lp-user')
-def lp_user():
-    return render_template('User/LPUser.html')
-
-@app.route('/pemasukan-user')
-def pemasukan_user():
-    return render_template('User/PemasukanUser.html')
-
-@app.route('/pengeluaran-user')
-def pengeluaran_user():
-    return render_template('User/PengeluaranUser.html')
-
-@app.route('/persuratan-user')
-def persuratan_user():
-    return render_template('User/PersuratanUser.html')
-
-@app.route('/proposal-user')
-def proposal_user():
-    return render_template('User/ProposalUser.html')
-
-@app.route('/surat-menyurat-user')
-def surat_menyurat_user():
-    return render_template('User/Surat-menyuratUser.html')
-
-# ===== ERROR HANDLERS =====
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('404.html'), 404
-
-@app.errorhandler(500)
-def internal_server_error(e):
-    return render_template('500.html'), 500
+    return "Aplikasi backend UKM FKDK berjalan!"
 
 # === ENDPOINT AUTH ===
 # Register
