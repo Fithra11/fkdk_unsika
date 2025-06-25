@@ -367,7 +367,7 @@ def submit_lpj():
         cursor = conn.cursor()
 
         insert_query = """
-        INSERT INTO LPJ (tanggalMasuk, departemen, namaProker, sekretaris, dokumenName, dokumenBase64)
+        INSERT INTO lpj (tanggalMasuk, departemen, namaProker, sekretaris, dokumenName, dokumenBase64)
         VALUES (%s, %s, %s, %s, %s, %s)
         """
         cursor.execute(insert_query, (tanggal_masuk, departemen, nama_proker, sekretaris, dokumen_name, dokumen_base64))
