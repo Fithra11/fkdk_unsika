@@ -102,7 +102,7 @@
             let password = document.getElementById("password").value;
 
             try {
-                const response = await fetch('http://localhost:8000/login', { // Sesuaikan URL dengan backend Anda
+                const response = await fetch('./login', { // Sesuaikan URL dengan backend Anda
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
